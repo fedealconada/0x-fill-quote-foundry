@@ -113,7 +113,34 @@ contract SimpleMarginTrading
         LibERC20Token.approve(token, delegated, MAX_UINT);
     }
 
-    // TODO: Add a function that executes and verify a 0x swap
+    function open(ZeroExQuote memory quote)
+        public
+        payable
+        onlyOwner
+        onlyWhenClosed
+        returns (uint256 positionBalance, uint256 borrowBalance)
+    {
+        // 1. increase position by msg.value - protocolFee
+        positionBalance = msg.value.safeSub(quote.protocolFee);
+        // 2. mint collateral in compound
+        CETH.mint.value(positionBalance)();
+        // 3. borrow token
+        require(CDAI.borrow(quote.sellAmount) == 0, "borrow didn't work");
+        // 4. swap token for collateral
+        _approve(address(DAI), _getZeroExApprovalAddress());
+        // 5. verify quote is valid
+        require(quote.sellToken == address(WETH), "not buying WETH");
+        require(quote.buyToken == address(DAI), "not buying WETH");
+        // 6. execute swap
+        (bool success, bytes memory data) = address(EXCHANGE).call.value(quote.protocolFee)(quote.calldataHex);
+        require(success, "Swap not filled.");
+        // 7. decode fill results
+        LibFillResults.FillResults memory fillResults = abi.decode(data, (LibFillResults.FillResults));
+        // 8. position size increase by bought amount of WETH
+        positionBalance += fillResults.makerAssetFilledAmount;
+        borrowBalance = CDAI.borrowBalanceCurrent(address(this));
+        // at this point you have CETH, and swapped for WETH
+    }
 
     // TODO: Add a function that opens a leverage position
 
