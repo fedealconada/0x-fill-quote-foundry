@@ -21,15 +21,54 @@ const openAsync = async (web3Wrapper: Web3Wrapper, contract: SimpleMarginTrading
     const takerAddress = userAddresses[0];
 
     // 1. perform some calculations for the contract
-    // TODO: calculations for leverage
+    const positionSize = baseUnitAmount(0.1);
+    const leverage = 0.5; // 1.5x leverage 
+    const buyAmount = positionSize.multipliedBy(leverage);
+
+    console.log(`fetching quote to buy ${buyAmount} ETH`);
 
     // 2. fetch a quote from 0x API
-    // TODO: fetch quote from 0x API 
+    const params = {
+        buyToken: 'ETH',
+        sellToken: 'DAI',
+        buyAmount: buyAmount.toString(),
+    }
 
-    // TODO: convert quote to the contract quote format 
+    const res = await fetch(`https://api.0x.org/swap/v0/quote?${qs.stringify(params)}`);
+    const quote = await res.json();
+
+    const onchainPassableQuote = {
+        buyToken: WETH_CONTRACT,
+        sellToken: DAI_CONTRACT,
+        buyAmount: quote.buyAmount,
+        sellAmount: quote.sellAmount,
+        protocolFee: quote.protocolFee,
+        calldataHex: quote.data,
+    };
+    const value = positionSize.plus(quote.protocolFee);
 
     // 3. execute a smart contract call to open a margin position
-    // TODO: interact with the margin trading contract
+    try {
+        const results = await contract.open(onchainPassableQuote).callAsync({
+            from: takerAddress,
+            value,
+            gasPrice: quote.gasPrice,
+            gas: 9000000,
+        });
+
+        console.log(`position size: (ETH in Compound + WETH): ${results[0]}`);
+        console.log(`dai borrowed from Compound: ${results[1]}`);
+        
+        await contract.open(onchainPassableQuote).awaitTransactionSuccessAsync({
+            from: takerAddress,
+            value,
+            gasPrice: quote.gasPrice,
+            gas: 9000000,
+        });
+        console.log("opened position.");
+    } catch (e) {
+        throw e;
+    }
 };
 
 const closeAsync = async (web3Wrapper: Web3Wrapper, contract: SimpleMarginTradingContract) => {
@@ -41,15 +80,47 @@ const closeAsync = async (web3Wrapper: Web3Wrapper, contract: SimpleMarginTradin
     // TODO: add snippet to callAsync the contract for dai borrow balance
 
     // 2. fetch 0x API quote to buy DAI for repayment
-    // TODO: fetch quote from 0x API 
+    const params = {
+        buyToken: 'DAI',
+        sellToken: 'WETH',
+        buyAmount: daiBorrowBalance.toString(),
+    }
 
-    // TODO: convert quote to the contract quote format ;
+    const res = await fetch(`https://api.0x.org/swap/v0/quote?${qs.stringify(params)}`);
+    const quote = await res.json();
 
-    // 3. calculate and provide an extra buffer of WETH to pay interest accrued.
-    // TODO: calculate value
+    const onchainPassableQuote = {
+        buyToken: WETH_CONTRACT,
+        sellToken: DAI_CONTRACT,
+        buyAmount: quote.buyAmount,
+        sellAmount: quote.sellAmount,
+        protocolFee: quote.protocolFee,
+        calldataHex: quote.data,
+    };
 
-    // 4. execute a smart contract call to open a margin position
-    // TODO: interact with the margin trading contract
+    const value = quote.protocolFee;
+
+    // 3. execute a smart contract call to open a margin position
+    try {
+        const results = await contract.close(onchainPassableQuote).callAsync({
+            from: takerAddress,
+            value,
+            gasPrice: quote.gasPrice,
+            gas: 9000000,
+        });
+
+        console.log(`eth balance size after closing position: ${results[0]}`);
+
+        await contract.close(onchainPassableQuote).awaitTransactionSuccessAsync({
+            from: takerAddress,
+            value,
+            gasPrice: quote.gasPrice,
+            gas: 9000000,
+        });
+        console.log("closed position.");
+    } catch (e) {
+        throw e;
+    }
 };
 
 ((async () => {
