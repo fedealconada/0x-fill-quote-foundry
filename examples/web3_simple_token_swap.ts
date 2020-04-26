@@ -3,7 +3,7 @@ import * as qs from 'qs';
 import * as fetch from 'node-fetch';
 
 // utils
-import { setUpWeb3GanacheAsync, baseUnitAmount, fetchERC20BalanceFactory } from './utils';
+import { setUpWeb3, baseUnitAmount, fetchERC20BalanceFactory } from './utils';
 import { ASSET_ADDRESSES } from './utils/addresses';
 
 // constants
@@ -12,7 +12,7 @@ const MNEMONIC = process.env.MNEMONIC;
 
 (async () => {
     // initialize ganache fork
-    const { web3Wrapper, provider } = await setUpWeb3GanacheAsync(MNEMONIC, ETHEREUM_RPC_URL);
+    const { web3Wrapper, provider } = await setUpWeb3(MNEMONIC, ETHEREUM_RPC_URL);
 
     // get user address
     const userAddresses = await web3Wrapper.getAvailableAddressesAsync();

@@ -3,7 +3,7 @@ import * as qs from 'qs';
 import * as fetch from 'node-fetch';
 
 // utils
-import { baseUnitAmount, setUpWeb3GanacheAsync, fetchERC20BalanceFactory } from './utils';
+import { baseUnitAmount, fetchERC20BalanceFactory, setUpWeb3 } from './utils';
 import { simpleTokenSwapMigrationAsync } from '../migrations/migration';
 import { ASSET_ADDRESSES } from './utils/addresses';
 
@@ -16,7 +16,7 @@ const MNEMONIC = process.env.MNEMONIC;
 
 (async () => {
     // initialize ganache fork and deploy contracts
-    const { web3Wrapper, provider } = await setUpWeb3GanacheAsync(MNEMONIC, ETHEREUM_RPC_URL);
+    const { web3Wrapper, provider } = await setUpWeb3(MNEMONIC, ETHEREUM_RPC_URL);
     const { simpleTokenSwapAddress } = await simpleTokenSwapMigrationAsync(provider, web3Wrapper);
 
     // handy util to check address balance of DAI
