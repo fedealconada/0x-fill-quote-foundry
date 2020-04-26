@@ -113,6 +113,8 @@ contract SimpleMarginTrading
         LibERC20Token.approve(token, delegated, MAX_UINT);
     }
 
+    // TODO: Add a function that executes and verify a 0x swap
+
     // TODO: Add a function that opens a leverage position
 
     // TODO: Add a function that closes the leverage position

@@ -5,16 +5,9 @@ import * as SimpleMarginTradingArtifact from '../generated-artifacts/SimpleMargi
 import { SimpleMarginTradingContract } from '../generated-wrappers/simple_margin_trading';
 
 import { getContractAddressesForChainOrThrow } from '@0x/contract-addresses';
+import { ASSET_ADDRESSES, COMPOUND_FINANCE_ADDRESSES } from '../examples/utils/addresses';
 
-const COMPOUND_FINANCE_ADDRESSES = {
-    comptroller: '0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b',
-    ceth: '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
-    cdai: '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-}
-
-const DAI_ADDRESS = '0x6b175474e89094c44da98b954eedeac495271d0f'; // DAI mainnet contract address
-
-const CHAIN_ID = 1 // Mainnet;
+const CHAIN_ID = parseInt(process.env.CHAIN_ID) || 1;
 
 export const marginTradingMigrationAsync = async (provider, web3Wrapper) => {
     const userAddresses = await web3Wrapper.getAvailableAddressesAsync();
@@ -33,7 +26,7 @@ export const marginTradingMigrationAsync = async (provider, web3Wrapper) => {
         zeroExaddresses.exchange,
         COMPOUND_FINANCE_ADDRESSES.comptroller,
         COMPOUND_FINANCE_ADDRESSES.cdai,
-        DAI_ADDRESS,
+        ASSET_ADDRESSES.dai,
         COMPOUND_FINANCE_ADDRESSES.ceth,
         zeroExaddresses.etherToken,
         );

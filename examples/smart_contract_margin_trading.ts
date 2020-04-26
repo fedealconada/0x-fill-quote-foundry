@@ -4,8 +4,9 @@ import * as fetch from 'node-fetch';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 
 // utils
-import { setUpWeb3GanacheAsync, baseUnitAmount } from './utils';
+import { baseUnitAmount, setUpWeb3 } from './utils';
 import { marginTradingMigrationAsync } from '../migrations/migration';
+import { ASSET_ADDRESSES } from './utils/addresses';
 
 // wrappers
 import { SimpleMarginTradingContract } from '../generated-wrappers/simple_margin_trading';
@@ -13,8 +14,6 @@ import { SimpleMarginTradingContract } from '../generated-wrappers/simple_margin
 // constants
 const ETHEREUM_RPC_URL = process.env.ETHEREUM_RPC_URL;
 const MNEMONIC = process.env.MNEMONIC;
-const WETH_CONTRACT = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'; // WETH mainnet contract address
-const DAI_CONTRACT = '0x6b175474e89094c44da98b954eedeac495271d0f'; // DAI mainnet contract address
 
 const openAsync = async (web3Wrapper: Web3Wrapper, contract: SimpleMarginTradingContract) => {
     // user address interacting with margin contract
@@ -46,12 +45,15 @@ const closeAsync = async (web3Wrapper: Web3Wrapper, contract: SimpleMarginTradin
 
     // TODO: convert quote to the contract quote format ;
 
-    // 3. execute a smart contract call to open a margin position
+    // 3. calculate and provide an extra buffer of WETH to pay interest accrued.
+    // TODO: calculate value
+
+    // 4. execute a smart contract call to open a margin position
     // TODO: interact with the margin trading contract
 };
 
 ((async () => {
-    const { web3Wrapper, provider } = await setUpWeb3GanacheAsync(MNEMONIC, ETHEREUM_RPC_URL);
+    const { web3Wrapper, provider } = await setUpWeb3(MNEMONIC, ETHEREUM_RPC_URL);
     const { simpleMarginTradingAddress } = await marginTradingMigrationAsync(provider, web3Wrapper);
 
     const contract = new SimpleMarginTradingContract(simpleMarginTradingAddress, provider);
