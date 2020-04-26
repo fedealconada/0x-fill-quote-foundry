@@ -13,7 +13,6 @@ import { SimpleTokenSwapContract } from '../generated-wrappers/simple_token_swap
 // constants
 const ETHEREUM_RPC_URL = process.env.ETHEREUM_RPC_URL;
 const MNEMONIC = process.env.MNEMONIC;
-const DAI_CONTRACT = '0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa'; // DAI kovan contract address
 
 (async () => {
     // initialize ganache fork and deploy contracts
