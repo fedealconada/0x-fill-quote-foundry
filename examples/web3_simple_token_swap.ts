@@ -4,11 +4,11 @@ import * as fetch from 'node-fetch';
 
 // utils
 import { setUpWeb3, baseUnitAmount, fetchERC20BalanceFactory } from './utils';
-import { ASSET_ADDRESSES } from './utils/addresses';
 
 // constants
 const ETHEREUM_RPC_URL = process.env.ETHEREUM_RPC_URL;
 const MNEMONIC = process.env.MNEMONIC;
+const DAI_CONTRACT = '0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa'; // DAI mainnet contract address
 
 (async () => {
     // initialize ganache fork
@@ -21,6 +21,32 @@ const MNEMONIC = process.env.MNEMONIC;
     // 1. call 0x api for a quote for one dollar of DAI.
     // TODO: fetch a quote from 0x API 
 
+    let params = {
+        sellToken: 'ETH',
+        buyToken: 'DAI',
+        buyAmount: buyAmount.toString(),
+        takerAddress,
+    }
+    
+    const fetchDAIBalanceAsync = fetchERC20BalanceFactory(provider, DAI_CONTRACT);
+
+    const res = await fetch(`https://kovan.api.0x.org/swap/v0/quote?${qs.stringify(params)}`);
+    const quote = await res.json();
+
+    console.log("quote", quote);
+
     // 2. send transaction with response from 0x api
-    // TODO: add web3 code to execute fetched quote
+    try {
+        console.log(`takerAddress dai balance before: ${await fetchDAIBalanceAsync(takerAddress)}`);
+        const txHash = await web3Wrapper.sendTransactionAsync({
+            ...quote,
+            ...{
+                from: takerAddress,
+            },
+        });
+        await web3Wrapper.awaitTransactionSuccessAsync(txHash);
+        console.log(`takerAddress dai balance after: ${await fetchDAIBalanceAsync(takerAddress)}`);
+    } catch (e) {
+        console.log(e)
+    }
 })();
