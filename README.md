@@ -45,7 +45,7 @@ npm run swap-contract-fork
 ### Running the examples on mainnet
 You can also run the examples and perform actual swaps that will get mined with a little effort:
 
-1. Modify the `mnemonic` in `package.json` to one only you know.
+1. Modify the `mnemonic` in `package.json` to one only you know. *Do not use the default mnemonic on mainnet!*
 2. Fund the first HD wallet account associated with that mnemonic with some ETH. You can run `npm run print-hd-wallet-accounts` to list the addresses associated with the configured mnemonic.
 
 #### Direct swap
