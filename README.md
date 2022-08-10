@@ -19,8 +19,8 @@ The following example scripts are included:
 
 | Script | Guide | Description |
 |--------|-------|-------------|
-| `src/direct-swap.js` |  [Swap tokens with 0x API](https://0x.org/docs/guides/swap-tokens-with-0x-api) | Perform a token swap with web3. |
-| `src/swap-contract.js` | [Use 0x API liquidity in your smart contracts](https://0x.org/docs/guides/use-0x-api-liquidity-in-your-smart-contracts) | Perform a token swap in a smart contract. |
+| `src/direct-swap.js` |  [Swap tokens with 0x API](https://docs.0x.org/0x-api-swap/guides/swap-tokens-with-0x-api) | Perform a token swap with web3. |
+| `src/swap-contract.js` | [Use 0x API liquidity in your smart contracts](https://docs.0x.org/0x-api-swap/guides/use-0x-api-liquidity-in-your-smart-contracts) | Perform a token swap in a smart contract. |
 
 ### Running the examples locally (forked mainnet)
 The examples can be run locally (without actually mining transactions) through the magic of ganache forking. You will first need to start a forked ganache instance with the following command, replacing `ETHEREUM_RPC_URL` with the HTTP or websocket RPC URL of your mainnet ethereum node (e.g., Infura mainnet):
