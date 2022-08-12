@@ -18,6 +18,7 @@ module.exports = {
             port: 8545,
             network_id: '*',
             weth: '0x0000000000000000000000000000000000000000',
+            exchange_proxy: '0x0000000000000000000000000000000000000000',
         },
         'forked-mainnet': {
             host: 'localhost',
@@ -25,21 +26,19 @@ module.exports = {
             network_id: '1',
             skipDryRun: true,
             weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            exchange_proxy: "0xDef1C0ded9bec7F1a1670819833240f027b25EfF",
         },
         mainnet: {
             provider: () => new HDWalletProvider(MNEMONIC, RPC_URL),
             network_id: '1',
             weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            exchange_proxy: "0xDef1C0ded9bec7F1a1670819833240f027b25EfF",
         },
-        ropsten: {
+        goerli: {
             provider: () => new HDWalletProvider(MNEMONIC, RPC_URL),
-            network_id: 3,
-            weth: '0xc778417e063141139fce010982780140aa0cd5ab',
-        },
-        kovan: {
-            provider: () => new HDWalletProvider(MNEMONIC, RPC_URL),
-            network_id: 42,
-            weth: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+            network_id: 5,
+            weth: '0x0bb7509324ce409f7bbc4b701f932eaca9736ab7',
+            exchange_proxy: "0xDef1C0ded9bec7F1a1670819833240f027b25EfF",
         },
     },
 
