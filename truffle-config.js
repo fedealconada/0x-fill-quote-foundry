@@ -37,8 +37,8 @@ module.exports = {
         goerli: {
             provider: () => new HDWalletProvider(MNEMONIC, RPC_URL),
             network_id: 5,
-            weth: '0x0bb7509324ce409f7bbc4b701f932eaca9736ab7',
-            exchange_proxy: "0xDef1C0ded9bec7F1a1670819833240f027b25EfF",
+            weth: '0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6',
+            exchange_proxy: "0xf91bb752490473b8342a3e964e855b9f9a2a668e",
         },
     },
 
