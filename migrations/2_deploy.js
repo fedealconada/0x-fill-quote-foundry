@@ -4,7 +4,7 @@ const SimpleTokenSwap = artifacts.require('SimpleTokenSwap');
 const CONFIG = require('../truffle-config');
 
 module.exports = function (deployer, network) {
-    deployer.deploy(SimpleTokenSwap, CONFIG.networks[network].weth)
+    deployer.deploy(SimpleTokenSwap, CONFIG.networks[network].weth, CONFIG.networks[network].exchange_proxy)
         .then(deployed => {
             if (network.startsWith('forked-')) {
                 // Update the forked deployed address in package.json.

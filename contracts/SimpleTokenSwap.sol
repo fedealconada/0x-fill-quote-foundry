@@ -23,9 +23,13 @@ contract SimpleTokenSwap {
     IWETH public immutable WETH;
     // Creator of this contract.
     address public owner;
+    // 0x ExchangeProxy address.
+    // See https://docs.0x.org/developer-resources/contract-addresses
+    address public exchangeProxy;
 
-    constructor(IWETH weth) {
-        WETH = weth;
+    constructor(IWETH _weth, address _exchangeProxy) {
+        WETH = _weth;
+        exchangeProxy = _exchangeProxy;
         owner = msg.sender;
     }
 
@@ -78,6 +82,9 @@ contract SimpleTokenSwap {
         onlyOwner
         payable // Must attach ETH equal to the `value` field from the API response.
     {
+        // Checks that the swapTarget is actually the address of 0x ExchangeProxy
+        require(swapTarget == exchangeProxy, "Target not ExchangeProxy");
+
         // Track our balance of the buyToken to determine how much we've bought.
         uint256 boughtAmount = buyToken.balanceOf(address(this));
 
