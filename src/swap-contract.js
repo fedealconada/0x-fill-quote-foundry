@@ -71,6 +71,7 @@ async function run(argv) {
     const response = await fetch(quoteUrl);
     const quote = await response.json();
     console.info(`Received a quote with price ${quote.price}`);
+    console.info(`Quote has following data ${quote.data}`);
 
     // Have the contract fill the quote, selling its own WETH.
     console.info(`Filling the quote through the contract at ${argv.deployedAddress.bold}...`);

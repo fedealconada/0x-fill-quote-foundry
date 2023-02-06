@@ -17,7 +17,7 @@
     },
     "config": {
         "mnemonic": "walnut mutual phone police nut tribe cross coast donate early urban target",
-        "forked_deployed_address": "0x7382949f535C1bb4D64059b934d4A63A11D3DAa2"
+        "forked_deployed_address": "0x5721931aa166C5d3631a7715F9bE6BE3AE729333"
     },
     "dependencies": {
         "@truffle/hdwallet-provider": "^1.1.0",

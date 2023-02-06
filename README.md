@@ -77,6 +77,12 @@ RPC_URL=ETHEREUM_RPC_URL npm run swap-contract-live -a 0.1 CONTRACT_ADDRESS
 
 Keep in mind that tokens will remain in the contract after the swap and can only be retrieved by your first HD wallet account through `withdrawToken()` or `withdrawETH()`.
 
+### Running the examples on mainnet with Foundry
+```bash
+forge build
+forge test --fork-url RPC_URL
+```
+
 ## Need help?
 * Refer to our [0x API specification](https://0x.org/docs/api) for detailed documentation.
 * 0x API is open source! Look through the [codebase](https://github.com/0xProject/0x-api) and deploy your own 0x API instance.

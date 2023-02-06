@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.4;
 
 // A partial ERC20 interface.
 interface IERC20 {
@@ -102,5 +102,5 @@ contract SimpleTokenSwap {
         // Use our current buyToken balance to determine how much we've bought.
         boughtAmount = buyToken.balanceOf(address(this)) - boughtAmount;
         emit BoughtTokens(sellToken, buyToken, boughtAmount);
-    }
+    }    
 }
