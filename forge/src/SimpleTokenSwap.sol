@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.3;
+pragma solidity ^0.8.13;
 
 // A partial ERC20 interface.
 interface IERC20 {
@@ -54,7 +54,7 @@ contract SimpleTokenSwap {
         external
         onlyOwner
     {
-        msg.sender.transfer(amount);
+       payable(msg.sender).transfer(amount);
     }
 
     // Transfer ETH into this contract and wrap it into WETH.
@@ -91,13 +91,13 @@ contract SimpleTokenSwap {
         // Give `spender` an infinite allowance to spend this contract's `sellToken`.
         // Note that for some tokens (e.g., USDT, KNC), you must first reset any existing
         // allowance to 0 before being able to update it.
-        require(sellToken.approve(spender, uint256(-1)));
+        require(sellToken.approve(spender, type(uint256).max));
         // Call the encoded swap function call on the contract at `swapTarget`,
         // passing along any ETH attached to this function call to cover protocol fees.
         (bool success,) = swapTarget.call{value: msg.value}(swapCallData);
         require(success, 'SWAP_CALL_FAILED');
         // Refund any unspent protocol fees to the sender.
-        msg.sender.transfer(address(this).balance);
+        payable(msg.sender).transfer(address(this).balance);
 
         // Use our current buyToken balance to determine how much we've bought.
         boughtAmount = buyToken.balanceOf(address(this)) - boughtAmount;
